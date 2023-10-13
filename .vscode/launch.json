@@ -1,0 +1,15 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": ".NET Core Launch (console)",
+            "type": "coreclr",
+            "request": "launch",
+            "preLaunchTask": "dotnet: build",
+            "program": "${workspaceFolder}/src/bin/Debug/net7.0/Pickaxe.dll",
+            "cwd": "${workspaceFolder}",
+            "stopAtEntry": false
+        }
+    ],
+    "compounds": []
+}

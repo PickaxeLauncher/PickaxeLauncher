@@ -1,0 +1,19 @@
+using Gtk 4.0;
+using Adw 1;
+
+Adw.PreferencesWindow _root {
+  default-width: 600;
+  default-height: 500;
+  width-request: 360;
+  modal: true;
+  destroy-with-parent: false;
+  hide-on-close: true;
+  title: _("Preferences");
+
+  Adw.PreferencesPage {
+    Adw.PreferencesGroup {
+      title: _("User Interface");
+
+    }
+  }
+}
