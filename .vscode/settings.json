@@ -6,5 +6,20 @@
         "Msal",
         "Nickvision",
         "Paintable"
-    ]
+    ],
+    "files.associations": {
+        "*.ui": "xml",
+        "*.sln.DotSettings": "xml",
+        "*.sln.DotSettings.user": "xml",
+        "*.doap": "xml"
+    },
+    "files.exclude": {
+        ".nuget-repo": true,
+        "**/.git": true,
+        "**/.svn": true,
+        "**/.hg": true,
+        "**/CVS": true,
+        "**/.DS_Store": true,
+        "**/Thumbs.db": true
+    }
 }

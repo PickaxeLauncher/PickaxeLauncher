@@ -1,6 +1,7 @@
 # Application
 <img src="Pickaxe.Shared/Resources/dev.bedsteler20.Pickaxe.png" width="100" height="100"/>
-
+dotnet nuget add source --username bedsteler20 --password $(gh auth token) --store-
+password-in-clear-text --name github "https://nuget.pkg.github.com/PickaxeLauncher/index.json"
  **Create new Nickvision applications**
 
 # Features

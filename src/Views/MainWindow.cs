@@ -18,13 +18,14 @@ public partial class MainWindow : Adw.ApplicationWindow {
     private readonly MainWindowController _controller;
     [Gtk.Connect] private readonly Adw.Avatar _profilePic;
     [Gtk.Connect] private readonly Adw.WindowTitle _title;
+    [Gtk.Connect] private readonly Adw.NavigationSplitView _viewStack;
 
     public MainWindow(MainWindowController controller, Adw.Application application) : this(
         Builder.FromFile("window.ui"), controller, application) {
     }
 
     private MainWindow(Gtk.Builder builder, MainWindowController controller,
-        Adw.Application application) : base(builder.GetPointer("_root"), false) {
+        Adw.Application application) {
         _controller = controller;
         _application = application;
         SetDefaultSize(800, 600);
@@ -47,6 +48,9 @@ public partial class MainWindow : Adw.ApplicationWindow {
         _controller.AccountController.AccountChanged +=
             async (sender, args) => await SetupProfilePic();
         BuildAccountSwitcher();
+
+        // _viewStack.AddNamed(_controller.);
+
         _ = SetupProfilePic();
     }
 
@@ -58,7 +62,6 @@ public partial class MainWindow : Adw.ApplicationWindow {
     }
 
     private async Task SetupProfilePic() {
-        // TODO: Error handling
         try {
             var path = Utils.GetCacheFolder("heads");
             var name = _controller.AccountController.Username;

@@ -353,6 +353,6 @@ _nickbuild/
 
 # Cake tools
 tools/
-
+.nuget-repo
 # WinUI App Installer
 *.WinUI/Installer/*.exe
