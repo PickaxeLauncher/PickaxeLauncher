@@ -2,16 +2,10 @@
 using Pickaxe.Helpers;
 using Pickaxe.Controllers;
 using System;
-using System.Diagnostics;
-using System.Globalization;
-using System.IO;
-using System.Text;
 using System.Threading.Tasks;
-using static Nickvision.GirExt.GtkExt;
-using static Pickaxe.Helpers.Gettext;
 using Nickvision.Aura;
-using XboxAuthNet.Game.Msal;
-using CmlLib.Core.Auth.Microsoft;
+using System.IO;
+using Microsoft.Extensions.Logging;
 
 namespace Pickaxe.Views;
 
@@ -23,6 +17,10 @@ public partial class MainWindow : Adw.ApplicationWindow {
     private readonly Adw.Application _application;
 
     [Gtk.Connect] private readonly Adw.WindowTitle _title;
+    [Gtk.Connect] private readonly Adw.Avatar _profilePic;
+    [Gtk.Connect] private readonly Gtk.MenuButton _accountMenuButton;
+
+
 
     public MainWindow(MainWindowController controller, Adw.Application application) : this(Builder.FromFile("window.ui"), controller, application) { }
 
@@ -43,19 +41,47 @@ public partial class MainWindow : Adw.ApplicationWindow {
         CreateAction("keyboardShortcuts", KeyboardShortcuts, new string[] { "<Ctrl>question" });
         CreateAction("quit", Quit, new string[] { "<Ctrl>q" });
         CreateAction("about", About, new string[] { "F1" });
-
+        CreateAction("addAccount", AddAccount);
+        CreateAction("signOut", SignOut);
+        _controller.AccountController.AccountChanged += async (sender, args) => await SetupProfilePic();
+        BuildAccountSwitcher();
+        _ = SetupProfilePic();
     }
 
+    private void BuildAccountSwitcher() {
+        var menu = Gio.Menu.New();
+        menu.AppendItem(Gio.MenuItem.New("Sign Out", "win.signOut"));
+        // menu.AppendItem(Gio.MenuItem.New("Add Account", "win.addAccount"));
+        _accountMenuButton.MenuModel = menu;
+    }
 
+    private async Task SetupProfilePic() {
+        // TODO: Error handling
+        try {
+            var path = Utils.GetCacheFolder("heads");
+            var name = _controller.AccountController.Username;
+            if (!Directory.Exists(path)) {
+                Directory.CreateDirectory(path);
+            }
+            var headPath = Path.Combine(path, $"{name}.png");
+            if (!File.Exists(headPath)) {
+                var client = new System.Net.Http.HttpClient();
+                var head = await client.GetByteArrayAsync($"https://mc-heads.net/avatar/{name}");
+                await File.WriteAllBytesAsync(headPath, head);
+            }
+            Gio.File file = Gio.Functions.FileNewForPath(headPath);
+            _profilePic.SetCustomImage(Gtk.IconPaintable.NewForFile(file, 200, 200));
+
+        } catch (Exception e) {
+            Console.WriteLine("Error setting profile pic", LogLevel.Error, "MainWindow", e);
+        }
+    }
 
     public async Task StartAsync() {
         _application.AddWindow(this);
         Present();
         _controller.TaskbarItem = await TaskbarItem.ConnectLinuxAsync($"{Aura.Active.AppInfo.ID}.desktop");
         await _controller.StartupAsync();
-        if (_controller.AccountController.Accounts.Count == 0) {
-            await _controller.AccountController.AddAccount();
-        }
     }
 
     private bool OnCloseRequested(Gtk.Window sender, EventArgs e) {
@@ -68,6 +94,15 @@ public partial class MainWindow : Adw.ApplicationWindow {
         var preferencesDialog = new PreferencesDialog(_controller.CreatePreferencesViewController(), _application, this);
         preferencesDialog.Present();
     }
+
+    private void AddAccount(Gio.SimpleAction sender, EventArgs e) {
+        _ = _controller.AccountController.AddAccount();
+    }
+
+    private void SignOut(Gio.SimpleAction sender, EventArgs e) {
+        _controller.AccountController.SignOut();
+    }
+
 
     private void KeyboardShortcuts(Gio.SimpleAction sender, EventArgs e) {
         var builder = Builder.FromFile("shortcuts_dialog.ui");

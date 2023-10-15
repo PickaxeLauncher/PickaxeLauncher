@@ -4,7 +4,7 @@
         {
             "type": "dotnet",
             "task": "build",
-            "problemMatcher": ["$msCompile"],
+            // "problemMatcher": ["$msCompile"],
             "group": "build",
             "presentation": {
                 "echo": true,

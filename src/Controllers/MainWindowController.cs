@@ -25,6 +25,7 @@ public class MainWindowController : IDisposable {
     public PreferencesController CreatePreferencesViewController() => new();
 
     public async Task StartupAsync() {
+        await AccountController.StartupAsync();
     }
 
     ~MainWindowController() => Dispose(false);

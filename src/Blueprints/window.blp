@@ -2,53 +2,69 @@ using Gtk 4.0;
 using Adw 1;
 
 menu mainMenu {
-  item(_("Preferences"), "win.preferences")
-  item(_("Keyboard Shortcuts"), "win.keyboardShortcuts")
-  item(_("About Application"), "win.about")
+    item(_("Preferences"), "win.preferences")
+    item(_("Keyboard Shortcuts"), "win.keyboardShortcuts")
+    item(_("About Application"), "win.about")
 }
 
+menu _accountMenu {
+    item(_("Sign Out"), "action-name", "icon-name")
+}
+
+
 Adw.ApplicationWindow _root {
-  default-width: 800;
-  default-height: 600;
+    default-width: 800;
+    default-height: 600;
 
-  Gtk.Box {
-    orientation: vertical;
+    Gtk.Box {
+        orientation: vertical;
 
-    Adw.HeaderBar _headerBar {
-      title-widget: Adw.WindowTitle _title {};
-      
-      [end]
-      Gtk.MenuButton {
-        direction: none;
-        menu-model: mainMenu;
-        tooltip-text: _("Main Menu");
-        primary: true;
-      }
+        Adw.HeaderBar _headerBar {
+            title-widget: Adw.WindowTitle _title {};
 
-      styles ["flat"]
-    }
-    
-    Adw.ToastOverlay _toastOverlay {
-      hexpand: true;
-      vexpand: true;
-      
-      Adw.ViewStack _viewStack {
-        Adw.ViewStackPage {
-          name: "NoFolder";
-          child: Adw.StatusPage _greeting {
-            icon-name: "dev.bedsteler20.Pickaxe";
-            description: _("Open a folder (or drag one into the app) to get started.");
-            styles ["icon-dropshadow"]
-          };
+            [end]
+            Gtk.MenuButton {
+                direction: none;
+                menu-model: mainMenu;
+                tooltip-text: _("Main Menu");
+                primary: true;
+            }
+
+            [end]
+            MenuButton _accountMenuButton {
+                direction: none;
+                tooltip-text: _("Account Menu");
+                child: Adw.Avatar _profilePic {
+                    size: 24;
+                };
+                styles ["flat"]
+            }
+
+
+            styles ["flat"]
         }
 
-        Adw.ViewStackPage {
-          name: "Folder";
-          child: Gtk.Box {
-            orientation: vertical;
-          };
+        Adw.ToastOverlay _toastOverlay {
+            hexpand: true;
+            vexpand: true;
+
+            Adw.ViewStack _viewStack {
+                Adw.ViewStackPage {
+                    name: "NoFolder";
+                    child: Adw.StatusPage _greeting {
+                        icon-name: "dev.bedsteler20.Pickaxe";
+                        description: _("Open a folder (or drag one into the app) to get started.");
+                        styles ["icon-dropshadow"]
+                    };
+                }
+
+                Adw.ViewStackPage {
+                    name: "Folder";
+                    child: Gtk.Box {
+                        orientation: vertical;
+                    };
+                }
+            }
         }
-      }
     }
-  }
 }
