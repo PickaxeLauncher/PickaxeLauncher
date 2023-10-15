@@ -7,9 +7,6 @@ menu mainMenu {
     item(_("About Application"), "win.about")
 }
 
-menu _accountMenu {
-    item(_("Sign Out"), "action-name", "icon-name")
-}
 
 
 Adw.ApplicationWindow _root {
@@ -47,23 +44,8 @@ Adw.ApplicationWindow _root {
         Adw.ToastOverlay _toastOverlay {
             hexpand: true;
             vexpand: true;
+            Adw.NavigationView _navView {
 
-            Adw.ViewStack _viewStack {
-                Adw.ViewStackPage {
-                    name: "NoFolder";
-                    child: Adw.StatusPage _greeting {
-                        icon-name: "dev.bedsteler20.Pickaxe";
-                        description: _("Open a folder (or drag one into the app) to get started.");
-                        styles ["icon-dropshadow"]
-                    };
-                }
-
-                Adw.ViewStackPage {
-                    name: "Folder";
-                    child: Gtk.Box {
-                        orientation: vertical;
-                    };
-                }
             }
         }
     }
