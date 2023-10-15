@@ -30,7 +30,7 @@
             BeforeTargets="CollectPackageReferences">
         <Message Text="Restoring tools"
                  Importance="High" />
-        <Exec Command="if [ !  -d 'bin/nuget' ]; then mkdir -p ../.nuget-repo; cd ../.nuget-repo; wget https://github.com/PickaxeLauncher/gir.core/releases/download/0.5.0/packages.tar.xz; tar xf packages.tar.xz; rm packages.tar.xz; fi" />
+        <Exec Command="if [ !  -d '../.nuget-repo' ]; then mkdir -p ../.nuget-repo; cd ../.nuget-repo; wget https://github.com/PickaxeLauncher/gir.core/releases/download/0.5.0/packages.tar.xz; tar xf packages.tar.xz; rm packages.tar.xz; fi" />
     </Target>
     <Target Name="PreBuild"
             BeforeTargets="PreBuildEvent">

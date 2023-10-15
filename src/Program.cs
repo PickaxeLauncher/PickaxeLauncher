@@ -76,9 +76,9 @@ public partial class Program : GetTextMixin {
 
     public static int Main(string[] args) => new Program(args).Run();
 
-    public int Run() {
+    public int Run(string[] args = null) {
         try {
-            return _application.RunWithSynchronizationContext();
+            return _application.RunWithSynchronizationContext(args);
         } catch (Exception ex) {
             Console.WriteLine(ex.Message);
             Console.WriteLine($"\n\n{ex.StackTrace}");
