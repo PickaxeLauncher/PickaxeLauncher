@@ -8,18 +8,23 @@ using System.Threading.Tasks;
 namespace Pickaxe.Controllers;
 
 public class MainWindowController : IDisposable {
-    public AccountController AccountController { get; } = new();
     private bool _disposed;
     private TaskbarItem _taskbarItem;
-
+    public AccountController AccountController { get; } = new();
 
     public TaskbarItem TaskbarItem {
         set {
             if (value == null) {
                 return;
             }
+
             _taskbarItem = value;
         }
+    }
+
+    public void Dispose() {
+        Dispose(true);
+        GC.SuppressFinalize(this);
     }
 
     public PreferencesController CreatePreferencesViewController() => new();
@@ -30,15 +35,11 @@ public class MainWindowController : IDisposable {
 
     ~MainWindowController() => Dispose(false);
 
-    public void Dispose() {
-        Dispose(true);
-        GC.SuppressFinalize(this);
-    }
-
     protected virtual void Dispose(bool disposing) {
         if (_disposed) {
             return;
         }
+
         _taskbarItem?.Dispose();
         _disposed = true;
     }

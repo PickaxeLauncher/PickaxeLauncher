@@ -7,7 +7,8 @@ namespace Pickaxe.Helpers;
 
 public static class Utils {
     public static string GetAppFolder() {
-        return Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), Aura.Active.AppInfo.ID);
+        return Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
+            Aura.Active.AppInfo.ID);
     }
 
     public static string GetAppFolder(params string[] paths) {
@@ -16,7 +17,10 @@ public static class Utils {
     }
 
     public static string GetCacheFolder() {
-        var xdg_cache = Environment.GetEnvironmentVariable("XDG_CACHE_HOME") ?? Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), ".cache");
+        var xdg_cache = Environment.GetEnvironmentVariable("XDG_CACHE_HOME") ??
+                        Path.Combine(
+                            Environment.GetFolderPath(Environment.SpecialFolder.UserProfile),
+                            ".cache");
         return Path.Combine(xdg_cache, Aura.Active.AppInfo.ID);
     }
 
@@ -24,5 +28,4 @@ public static class Utils {
         var f = GetCacheFolder();
         return Path.Combine(f, Path.Combine(paths));
     }
-
 }

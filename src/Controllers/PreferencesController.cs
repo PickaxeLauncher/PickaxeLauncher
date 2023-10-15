@@ -11,7 +11,6 @@ public class PreferencesController {
     /// Constructs a PreferencesViewController
     /// </summary>
     internal PreferencesController() {
-
     }
 
     /// <summary>

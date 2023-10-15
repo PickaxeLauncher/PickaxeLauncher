@@ -5,7 +5,8 @@ using System.Reflection;
 namespace Pickaxe.Helpers;
 
 public static class Gettext {
-    private static readonly ICatalog _catalog = new Catalog("application", Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location));
+    private static readonly ICatalog _catalog = new Catalog("application",
+        Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location));
 
     public static string _(string text) {
         return _catalog.GetString(text);
@@ -35,7 +36,8 @@ public static class Gettext {
         return _catalog.GetParticularPluralString(context, text, pluralText, n);
     }
 
-    public static string _pn(string context, string text, string pluralText, long n, params object[] args) {
+    public static string _pn(string context, string text, string pluralText, long n,
+        params object[] args) {
         return _catalog.GetParticularPluralString(context, text, pluralText, n, args);
     }
 }
@@ -69,7 +71,8 @@ public class GetTextMixin {
         return Gettext._pn(context, text, pluralText, n);
     }
 
-    public string _pn(string context, string text, string pluralText, long n, params object[] args) {
+    public string _pn(string context, string text, string pluralText, long n,
+        params object[] args) {
         return Gettext._pn(context, text, pluralText, n, args);
     }
 }

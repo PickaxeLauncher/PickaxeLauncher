@@ -5,12 +5,11 @@ namespace Pickaxe.Models;
 /// <summary>
 /// A model for the configuration of the application
 /// </summary>
-public class Configuration : ConfigurationBase
-{
+public class Configuration : ConfigurationBase {
     /// <summary>
     /// Constructs a Configuration
     /// </summary>
-    public Configuration()    {
+    public Configuration() {
     }
 
     /// <summary>

@@ -13,14 +13,9 @@ namespace Pickaxe.Controllers;
 
 public class AccountController {
     private const string CLIENT_ID = "499c8d36-be2a-4231-9ebd-ef291b7bb64c";
-
     private readonly JsonXboxGameAccountManager _accountManager;
     private readonly JELoginHandler _loginHandler;
     private MSession _session;
-
-    public string Username => _session?.Username ?? "Steve";
-
-    public event EventHandler AccountChanged;
 
     public AccountController() {
         _accountManager = new JsonXboxGameAccountManager(Utils.GetAppFolder("accounts.json"));
@@ -29,7 +24,9 @@ public class AccountController {
             .Build();
     }
 
+    public string Username => _session?.Username ?? "Steve";
     public XboxGameAccountCollection Accounts => _accountManager.GetAccounts();
+    public event EventHandler AccountChanged;
 
     public void SignOut() {
         _accountManager.ClearAccounts();
@@ -69,6 +66,4 @@ public class AccountController {
             await LoginToDefaultAccount();
         }
     }
-
-
 }

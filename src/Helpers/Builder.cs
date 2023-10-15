@@ -5,37 +5,31 @@ using static Pickaxe.Helpers.Gettext;
 
 namespace Pickaxe.Helpers;
 
-public class Builder
-{
+public class Builder {
     /// <summary>
     /// Creates a Gtk.Builder from an embedded resource and replaces all translatable strings with the localized version
     /// </summary>
     /// <param name="name">The name of the embedded resource</param>
     /// <returns>Gtk.Builder</returns>
-    public static Gtk.Builder FromFile(string name)
-    {
+    public static Gtk.Builder FromFile(string name) {
         using var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream(name);
         using var reader = new StreamReader(stream!);
         var uiContents = reader.ReadToEnd();
         var xml = new XmlDocument();
         xml.LoadXml(uiContents);
         var elements = xml.GetElementsByTagName("*");
-        foreach (XmlElement element in elements)
-        {
-            if (element.HasAttribute("translatable"))
-            {
+        foreach (XmlElement element in elements) {
+            if (element.HasAttribute("translatable")) {
                 element.RemoveAttribute("translatable");
-                if (element.HasAttribute("context"))
-                {
+                if (element.HasAttribute("context")) {
                     var context = element.GetAttribute("context");
                     element.InnerText = _p(context, element.InnerText);
-                }
-                else
-                {
+                } else {
                     element.InnerText = _(element.InnerText);
                 }
             }
         }
+
         return Gtk.Builder.NewFromString(xml.OuterXml, -1);
     }
 }

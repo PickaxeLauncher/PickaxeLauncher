@@ -7,21 +7,22 @@ using Nickvision.Aura;
 using Pickaxe.Helpers;
 
 public class AboutDialog : GetTextMixin {
-    private Adw.AboutWindow _dialog = Adw.AboutWindow.New();
-
-    public void Present() => _dialog.Present();
+    private readonly Adw.AboutWindow _dialog = Adw.AboutWindow.New();
 
     public AboutDialog(Gtk.Window window) {
         var debugInfo = new StringBuilder();
         debugInfo.AppendLine(Aura.Active.AppInfo.ID);
         debugInfo.AppendLine(Aura.Active.AppInfo.Version);
-        debugInfo.AppendLine($"GTK {Gtk.Functions.GetMajorVersion()}.{Gtk.Functions.GetMinorVersion()}.{Gtk.Functions.GetMicroVersion()}");
-        debugInfo.AppendLine($"libadwaita {Adw.Functions.GetMajorVersion()}.{Adw.Functions.GetMinorVersion()}.{Adw.Functions.GetMicroVersion()}");
+        debugInfo.AppendLine(
+            $"GTK {Gtk.Functions.GetMajorVersion()}.{Gtk.Functions.GetMinorVersion()}.{Gtk.Functions.GetMicroVersion()}");
+        debugInfo.AppendLine(
+            $"libadwaita {Adw.Functions.GetMajorVersion()}.{Adw.Functions.GetMinorVersion()}.{Adw.Functions.GetMicroVersion()}");
         if (File.Exists("/.flatpak-info")) {
             debugInfo.AppendLine("Flatpak");
         } else if (!string.IsNullOrEmpty(Environment.GetEnvironmentVariable("SNAP"))) {
             debugInfo.AppendLine("Snap");
         }
+
         debugInfo.AppendLine(CultureInfo.CurrentCulture.ToString());
         var localeProcess = new Process {
             StartInfo = new ProcessStartInfo {
@@ -38,10 +39,12 @@ public class AboutDialog : GetTextMixin {
         } catch {
             debugInfo.AppendLine("Unknown locale");
         }
+
         _dialog.SetTransientFor(window);
         _dialog.SetIconName(Aura.Active.AppInfo.ID);
         _dialog.SetApplicationName(Aura.Active.AppInfo.ShortName);
-        _dialog.SetApplicationIcon(Aura.Active.AppInfo.ID + (Aura.Active.AppInfo.IsDevVersion ? "-devel" : ""));
+        _dialog.SetApplicationIcon(Aura.Active.AppInfo.ID +
+                                   (Aura.Active.AppInfo.IsDevVersion ? "-devel" : ""));
         _dialog.SetVersion(Aura.Active.AppInfo.Version);
         _dialog.SetDebugInfo(debugInfo.ToString());
         _dialog.SetComments(Aura.Active.AppInfo.Description);
@@ -55,10 +58,15 @@ public class AboutDialog : GetTextMixin {
         foreach (var pair in Aura.Active.AppInfo.ExtraLinks) {
             _dialog.AddLink(pair.Key, pair.Value.ToString());
         }
-        _dialog.SetDevelopers(Aura.Active.AppInfo.ConvertURLDictToArray(Aura.Active.AppInfo.Developers));
-        _dialog.SetDesigners(Aura.Active.AppInfo.ConvertURLDictToArray(Aura.Active.AppInfo.Designers));
+
+        _dialog.SetDevelopers(
+            Aura.Active.AppInfo.ConvertURLDictToArray(Aura.Active.AppInfo.Developers));
+        _dialog.SetDesigners(
+            Aura.Active.AppInfo.ConvertURLDictToArray(Aura.Active.AppInfo.Designers));
         _dialog.SetArtists(Aura.Active.AppInfo.ConvertURLDictToArray(Aura.Active.AppInfo.Artists));
         _dialog.SetTranslatorCredits(Aura.Active.AppInfo.TranslatorCredits);
         _dialog.SetReleaseNotes(Aura.Active.AppInfo.HTMLChangelog);
     }
+
+    public void Present() => _dialog.Present();
 }

@@ -12,10 +12,8 @@ namespace Pickaxe;
 
 public partial class Program : GetTextMixin {
     private readonly Adw.Application _application;
+    private readonly MainWindowController _mainWindowController;
     private MainWindow _mainWindow;
-    private MainWindowController _mainWindowController;
-
-    public static int Main(string[] args) => new Program(args).Run();
 
     public Program(string[] args) {
         Aura.Init("dev.bedsteler20.Pickaxe", "Nickvision Application");
@@ -24,12 +22,18 @@ public partial class Program : GetTextMixin {
         Aura.Active.AppInfo.ShortName = _("Application");
         Aura.Active.AppInfo.Description = _("Create new Nickvision applications");
         Aura.Active.AppInfo.SourceRepo = new Uri("https://github.com/NickvisionApps/Application");
-        Aura.Active.AppInfo.IssueTracker = new Uri("https://github.com/NickvisionApps/Application/issues/new");
-        Aura.Active.AppInfo.SupportUrl = new Uri("https://github.com/NickvisionApps/Application/discussions");
-        Aura.Active.AppInfo.ExtraLinks[_("Matrix Chat")] = new Uri("https://matrix.to/#/#nickvision:matrix.org");
-        Aura.Active.AppInfo.Developers[_("Nicholas Logozzo")] = new Uri("https://github.com/nlogozzo");
-        Aura.Active.AppInfo.Developers[_("Contributors on GitHub ❤️")] = new Uri("https://github.com/NickvisionApps/Application/graphs/contributors");
-        Aura.Active.AppInfo.Designers[_("Nicholas Logozzo")] = new Uri("https://github.com/nlogozzo");
+        Aura.Active.AppInfo.IssueTracker =
+            new Uri("https://github.com/NickvisionApps/Application/issues/new");
+        Aura.Active.AppInfo.SupportUrl =
+            new Uri("https://github.com/NickvisionApps/Application/discussions");
+        Aura.Active.AppInfo.ExtraLinks[_("Matrix Chat")] =
+            new Uri("https://matrix.to/#/#nickvision:matrix.org");
+        Aura.Active.AppInfo.Developers[_("Nicholas Logozzo")] =
+            new Uri("https://github.com/nlogozzo");
+        Aura.Active.AppInfo.Developers[_("Contributors on GitHub ❤️")] =
+            new Uri("https://github.com/NickvisionApps/Application/graphs/contributors");
+        Aura.Active.AppInfo.Designers[_("Nicholas Logozzo")] =
+            new Uri("https://github.com/nlogozzo");
         Aura.Active.AppInfo.Designers[_("Fyodor Sobolev")] = new Uri("https://github.com/fsobolev");
         Aura.Active.AppInfo.Designers[_("DaPigGuy")] = new Uri("https://github.com/DaPigGuy");
         Aura.Active.AppInfo.Artists[_("David Lapshin")] = new Uri("https://github.com/daudix-UFO");
@@ -39,23 +43,38 @@ public partial class Program : GetTextMixin {
         _mainWindowController = new MainWindowController();
         _application.OnActivate += OnActivate;
 
-        if (File.Exists(Path.GetFullPath(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)) + "/dev.bedsteler20.Pickaxe.gresource")) {
+        if (File.Exists(
+                Path.GetFullPath(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)) +
+                "/dev.bedsteler20.Pickaxe.gresource")) {
             //Load file from program directory, required for `dotnet run`
-            Gio.Functions.ResourcesRegister(Gio.Functions.ResourceLoad(Path.GetFullPath(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)) + "/dev.bedsteler20.Pickaxe.gresource"));
+            Gio.Functions.ResourcesRegister(Gio.Functions.ResourceLoad(
+                Path.GetFullPath(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)) +
+                "/dev.bedsteler20.Pickaxe.gresource"));
         } else {
             var prefixes = new List<string> {
-               Directory.GetParent(Directory.GetParent(Path.GetFullPath(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location))).FullName).FullName,
-               Directory.GetParent(Path.GetFullPath(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location))).FullName,
-               "/usr"
+                Directory.GetParent(Directory
+                        .GetParent(Path.GetFullPath(
+                            Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)))
+                        .FullName)
+                    .FullName,
+                Directory.GetParent(
+                    Path.GetFullPath(
+                        Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location))).FullName,
+                "/usr"
             };
             foreach (var prefix in prefixes) {
-                if (File.Exists(prefix + "/share/dev.bedsteler20.Pickaxe/dev.bedsteler20.Pickaxe.gresource")) {
-                    Gio.Functions.ResourcesRegister(Gio.Functions.ResourceLoad(Path.GetFullPath(prefix + "/share/dev.bedsteler20.Pickaxe/dev.bedsteler20.Pickaxe.gresource")));
+                if (File.Exists(prefix +
+                                "/share/dev.bedsteler20.Pickaxe/dev.bedsteler20.Pickaxe.gresource")) {
+                    Gio.Functions.ResourcesRegister(Gio.Functions.ResourceLoad(
+                        Path.GetFullPath(prefix +
+                                         "/share/dev.bedsteler20.Pickaxe/dev.bedsteler20.Pickaxe.gresource")));
                     break;
                 }
             }
         }
     }
+
+    public static int Main(string[] args) => new Program(args).Run();
 
     public int Run() {
         try {
@@ -72,5 +91,4 @@ public partial class Program : GetTextMixin {
         _mainWindow = new MainWindow(_mainWindowController, _application);
         await _mainWindow.StartAsync();
     }
-
 }

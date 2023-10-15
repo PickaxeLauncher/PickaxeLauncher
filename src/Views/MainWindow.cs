@@ -13,18 +13,18 @@ namespace Pickaxe.Views;
 /// The MainWindow for the application
 /// </summary>
 public partial class MainWindow : Adw.ApplicationWindow {
-    private readonly MainWindowController _controller;
-    private readonly Adw.Application _application;
-
-    [Gtk.Connect] private readonly Adw.WindowTitle _title;
-    [Gtk.Connect] private readonly Adw.Avatar _profilePic;
     [Gtk.Connect] private readonly Gtk.MenuButton _accountMenuButton;
+    private readonly Adw.Application _application;
+    private readonly MainWindowController _controller;
+    [Gtk.Connect] private readonly Adw.Avatar _profilePic;
+    [Gtk.Connect] private readonly Adw.WindowTitle _title;
 
+    public MainWindow(MainWindowController controller, Adw.Application application) : this(
+        Builder.FromFile("window.ui"), controller, application) {
+    }
 
-
-    public MainWindow(MainWindowController controller, Adw.Application application) : this(Builder.FromFile("window.ui"), controller, application) { }
-
-    private MainWindow(Gtk.Builder builder, MainWindowController controller, Adw.Application application) : base(builder.GetPointer("_root"), false) {
+    private MainWindow(Gtk.Builder builder, MainWindowController controller,
+        Adw.Application application) : base(builder.GetPointer("_root"), false) {
         _controller = controller;
         _application = application;
         SetDefaultSize(800, 600);
@@ -33,6 +33,7 @@ public partial class MainWindow : Adw.ApplicationWindow {
         if (Aura.Active.AppInfo.IsDevVersion) {
             AddCssClass("devel");
         }
+
         builder.Connect(this);
         _title.SetTitle(Aura.Active.AppInfo.ShortName);
         OnCloseRequest += OnCloseRequested;
@@ -43,7 +44,8 @@ public partial class MainWindow : Adw.ApplicationWindow {
         CreateAction("about", About, new string[] { "F1" });
         CreateAction("addAccount", AddAccount);
         CreateAction("signOut", SignOut);
-        _controller.AccountController.AccountChanged += async (sender, args) => await SetupProfilePic();
+        _controller.AccountController.AccountChanged +=
+            async (sender, args) => await SetupProfilePic();
         BuildAccountSwitcher();
         _ = SetupProfilePic();
     }
@@ -63,15 +65,16 @@ public partial class MainWindow : Adw.ApplicationWindow {
             if (!Directory.Exists(path)) {
                 Directory.CreateDirectory(path);
             }
+
             var headPath = Path.Combine(path, $"{name}.png");
             if (!File.Exists(headPath)) {
                 var client = new System.Net.Http.HttpClient();
                 var head = await client.GetByteArrayAsync($"https://mc-heads.net/avatar/{name}");
                 await File.WriteAllBytesAsync(headPath, head);
             }
-            Gio.File file = Gio.Functions.FileNewForPath(headPath);
-            _profilePic.SetCustomImage(Gtk.IconPaintable.NewForFile(file, 200, 200));
 
+            var file = Gio.Functions.FileNewForPath(headPath);
+            _profilePic.SetCustomImage(Gtk.IconPaintable.NewForFile(file, 200, 200));
         } catch (Exception e) {
             Console.WriteLine("Error setting profile pic", LogLevel.Error, "MainWindow", e);
         }
@@ -80,7 +83,8 @@ public partial class MainWindow : Adw.ApplicationWindow {
     public async Task StartAsync() {
         _application.AddWindow(this);
         Present();
-        _controller.TaskbarItem = await TaskbarItem.ConnectLinuxAsync($"{Aura.Active.AppInfo.ID}.desktop");
+        _controller.TaskbarItem =
+            await TaskbarItem.ConnectLinuxAsync($"{Aura.Active.AppInfo.ID}.desktop");
         await _controller.StartupAsync();
     }
 
@@ -89,9 +93,9 @@ public partial class MainWindow : Adw.ApplicationWindow {
         return false;
     }
 
-
     private void Preferences(Gio.SimpleAction sender, EventArgs e) {
-        var preferencesDialog = new PreferencesDialog(_controller.CreatePreferencesViewController(), _application, this);
+        var preferencesDialog = new PreferencesDialog(_controller.CreatePreferencesViewController(),
+            _application, this);
         preferencesDialog.Present();
     }
 
@@ -102,7 +106,6 @@ public partial class MainWindow : Adw.ApplicationWindow {
     private void SignOut(Gio.SimpleAction sender, EventArgs e) {
         _controller.AccountController.SignOut();
     }
-
 
     private void KeyboardShortcuts(Gio.SimpleAction sender, EventArgs e) {
         var builder = Builder.FromFile("shortcuts_dialog.ui");
@@ -123,7 +126,9 @@ public partial class MainWindow : Adw.ApplicationWindow {
         aboutDialog.Present();
     }
 
-    private void CreateAction(string name, GObject.SignalHandler<Gio.SimpleAction, Gio.SimpleAction.ActivateSignalArgs> action, string[] accel = null) {
+    private void CreateAction(string name,
+        GObject.SignalHandler<Gio.SimpleAction, Gio.SimpleAction.ActivateSignalArgs> action,
+        string[] accel = null) {
         var act = Gio.SimpleAction.New(name, null);
         act.OnActivate += action;
         AddAction(act);

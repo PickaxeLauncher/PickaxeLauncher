@@ -15,6 +15,21 @@
                 "clear": false
             },
             "label": "dotnet: build"
+        },
+        {
+            "type": "shell",
+            "label": "Format",
+            "command": [
+                "dotnet",
+                "tool",
+                "run",
+                "jb",
+                "cleanupcode",
+                "--profile=CleanUp",
+                "--telemetry-optout",
+                "--no-build",
+                "Application.sln"
+            ]
         }
     ]
 }
