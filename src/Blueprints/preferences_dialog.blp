@@ -16,4 +16,21 @@ Adw.PreferencesWindow _root {
 
         }
     }
+    Adw.PreferencesPage {
+        title: _("Debug");
+        Adw.PreferencesGroup {
+            title: _("Debug");
+            Adw.ActionRow {
+                title: _("Collect Garbage");
+                // action-name: "collect-garbage";
+                [suffix]
+                Button _collectGCButton {
+                    margin-bottom: 10;
+                    margin-top: 10;
+                    label: "Run";
+                    styles ["suggested-action", "pill"]
+                }
+            }
+        }
+    }
 }

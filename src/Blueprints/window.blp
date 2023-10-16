@@ -1,7 +1,8 @@
 using Gtk 4.0;
 using Adw 1;
 
-menu mainMenu {
+menu _mainMenu {
+    item(_("New Instence"), "win.newInstance")
     item(_("Preferences"), "win.preferences")
     item(_("Keyboard Shortcuts"), "win.keyboardShortcuts")
     item(_("About Application"), "win.about")
@@ -10,40 +11,208 @@ menu mainMenu {
 
 
 Adw.ApplicationWindow _root {
-    default-width: 800;
-    default-height: 600;
-
-    Gtk.Box {
-        orientation: vertical;
-
-        Adw.HeaderBar _headerBar {
-            title-widget: Adw.WindowTitle _title {};
-
-            [end]
-            Gtk.MenuButton {
-                direction: none;
-                menu-model: mainMenu;
-                tooltip-text: _("Main Menu");
-                primary: true;
-            }
-
-            [end]
-            MenuButton _accountMenuButton {
-                direction: none;
-                tooltip-text: _("Account Menu");
-                child: Adw.Avatar _profilePic {
-                    size: 24;
-                };
-                styles ["flat"]
-            }
-
-
-            styles ["flat"]
-        }
-        Adw.ToastOverlay _toastOverlay {
-            hexpand: true;
-            vexpand: true;
-            Adw.NavigationSplitView _navView {}
+    title: "Flatseal";
+    width-request: 360;
+    height-request: 294;
+    Adw.Breakpoint {
+        condition("max-width: 800sp")
+        setters {
+            _navView.collapsed: true;
+            _startHeaderBox.visible: false;
+            _endHeaderBox.visible: false;
+            _actionBar.visible: true;
         }
     }
+
+    content: Adw.NavigationSplitView _navView {
+        sidebar: Adw.NavigationPage {
+            width-request: 360;
+            tag: "applications";
+            title: _("Applications");
+            child: Adw.ToolbarView {
+                [top]
+                Adw.HeaderBar applicationsHeaderBar {
+                    visible: true;
+
+                    [end]
+                    Gtk.MenuButton {
+                        direction: none;
+                        menu-model: _mainMenu;
+                        tooltip-text: _("Main Menu");
+                        primary: true;
+                    }
+
+                    [end]
+                    MenuButton _accountMenuButton {
+                        direction: none;
+                        tooltip-text: _("Account Menu");
+                        child: Adw.Avatar _profilePic {
+                            size: 24;
+                        };
+                        styles ["flat"]
+                    }
+
+                    ToggleButton applicationsSearchButton {
+                        icon-name: "system-search-symbolic";
+
+                        ShortcutController {
+                            scope: global;
+
+                            Shortcut {
+                                trigger: "<Control>F";
+                                action: "activate";
+                            }
+                        }
+                    }
+                }
+
+                [top]
+                SearchBar applicationsSearchBar {
+                    SearchEntry applicationsSearchEntry {
+                        hexpand: true;
+                    }
+                }
+                content: Adw.ToastOverlay applicationsToastOverlay {
+                    child: ScrolledWindow {
+                        child: ListBox applicationsListBox {
+                            styles [
+                                "navigation-sidebar",
+                            ]
+
+                            vexpand: true;
+                            selection-mode: browse;
+
+                            [placeholder]
+                            Adw.StatusPage {
+
+                                title: _("No instences found.");
+                                child: Button {
+                                    label: _("New Instences");
+                                    action-name: "win.newInstance";
+                                    halign: center;
+                                    styles ["suggested-action", "pill"]
+                                };
+                                styles [
+                                    "compact",
+                                    "navigation-sidebar",
+                                ]
+                            }
+                        };
+                    };
+                };
+            };
+        }
+
+        ;
+        content: Adw.NavigationPage {
+            tag: "info";
+            child: Adw.ToolbarView {
+                [top]
+                Adw.HeaderBar _infoHeaderBar {
+                    hexpand: true;
+                    title-widget: Adw.WindowTitle _title {};
+
+                    Box _startHeaderBox {
+                        valign: center;
+                    }
+
+                    [end]
+                    Box _endHeaderBox {
+                        valign: center;
+                    }
+                }
+                content: Adw.ToastOverlay toastOverlay {
+                    child: Box {
+                        vexpand: true;
+                        orientation: vertical;
+
+                        Stack permissionsStack {
+                            vexpand: true;
+
+                            StackPage {
+                                name: "withNoPermissionsPage";
+                                child: Box {};
+                            }
+
+                            StackPage {
+                                name: "withPermissionsPage";
+                                child: Adw.PreferencesPage permissionsBox {
+                                    Adw.PreferencesGroup appInfoGroup {}
+                                };
+                            }
+                        }
+
+                        styles [
+                            "permissions",
+                        ]
+                    };
+                };
+
+                [bottom]
+                ActionBar _actionBar {
+                    visible: false;
+
+                    Box startActionBox {
+                        valign: center;
+                    }
+
+                    [end]
+                    Box endActionBox {
+                        valign: center;
+                    }
+                }
+            };
+        };
+    };
 }
+
+// Adw.ApplicationWindow _root {
+// default-width: 800;
+// default-height: 600;
+// Adw.NavigationSplitView _navView {
+// sidebar: Adw.NavigationPage {
+// width-request: 360;
+// visible: true;
+// tag: "instences";
+// title: _("Instences");
+// child: Adw.ToolbarView {
+// [top]
+// Adw.HeaderBar {
+// visible: true;
+// 
+// [end]
+// Gtk.MenuButton {
+// direction: none;
+// menu-model: mainMenu;
+// tooltip-text: _("Main Menu");
+// primary: true;
+// }
+// 
+// [end]
+// MenuButton _accountMenuButton {
+// direction: none;
+// tooltip-text: _("Account Menu");
+// child: Adw.Avatar _profilePic {
+// size: 24;
+// };
+// styles ["flat"]
+// }
+// 
+// }
+// };
+// };
+// content: Adw.NavigationPage {
+// tag: "home";
+// title: _("Home");
+// child: Adw.ToolbarView {
+// [top]
+// Adw.HeaderBar _headerBar {
+// visible: true;
+// title-widget: Adw.WindowTitle _title {
+// title: _("Home");
+// };
+// }
+// };
+// };
+// }
+// }

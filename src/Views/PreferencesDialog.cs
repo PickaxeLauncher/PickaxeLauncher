@@ -12,6 +12,7 @@ namespace Pickaxe.Views;
 public partial class PreferencesDialog : Adw.PreferencesWindow {
     private readonly Adw.Application _application;
     private readonly PreferencesController _controller;
+    [Gtk.Connect] private readonly Gtk.Button _collectGCButton;
 
     public PreferencesDialog(PreferencesController controller, Adw.Application application,
         Gtk.Window parent) : this(Builder.FromFile("preferences_dialog.ui"), controller,
@@ -26,10 +27,18 @@ public partial class PreferencesDialog : Adw.PreferencesWindow {
         SetIconName(Aura.Active.AppInfo.ID);
         builder.Connect(this);
         OnHide += Hide;
+        _collectGCButton.OnClicked += CollectGC;
     }
 
     private void Hide(Gtk.Widget sender, EventArgs e) {
         _controller.SaveConfiguration();
         Destroy();
+    }
+
+    private void CollectGC(object sender, EventArgs e) {
+        for (int i = 0; i < GC.MaxGeneration; i++) {
+            GC.Collect(i, GCCollectionMode.Forced, true, true);
+            GC.WaitForPendingFinalizers();
+        }
     }
 }

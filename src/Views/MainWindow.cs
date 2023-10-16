@@ -18,14 +18,14 @@ public partial class MainWindow : Adw.ApplicationWindow {
     private readonly MainWindowController _controller;
     [Gtk.Connect] private readonly Adw.Avatar _profilePic;
     [Gtk.Connect] private readonly Adw.WindowTitle _title;
-    [Gtk.Connect] private readonly Adw.NavigationSplitView _viewStack;
+    [Gtk.Connect] private readonly Adw.NavigationSplitView _navView;
 
     public MainWindow(MainWindowController controller, Adw.Application application) : this(
         Builder.FromFile("window.ui"), controller, application) {
     }
 
     private MainWindow(Gtk.Builder builder, MainWindowController controller,
-        Adw.Application application) {
+        Adw.Application application) : base(builder.GetPointer("_root"), false) {
         _controller = controller;
         _application = application;
         SetDefaultSize(800, 600);
@@ -39,6 +39,7 @@ public partial class MainWindow : Adw.ApplicationWindow {
         _title.SetTitle(Aura.Active.AppInfo.ShortName);
         OnCloseRequest += OnCloseRequested;
 
+        CreateAction("newInstance", NewInstance, new string[] { "<Ctrl>n" });
         CreateAction("preferences", Preferences, new string[] { "<Ctrl>comma" });
         CreateAction("keyboardShortcuts", KeyboardShortcuts, new string[] { "<Ctrl>question" });
         CreateAction("quit", Quit, new string[] { "<Ctrl>q" });
@@ -48,9 +49,6 @@ public partial class MainWindow : Adw.ApplicationWindow {
         _controller.AccountController.AccountChanged +=
             async (sender, args) => await SetupProfilePic();
         BuildAccountSwitcher();
-
-        // _viewStack.AddNamed(_controller.);
-
         _ = SetupProfilePic();
     }
 
@@ -127,6 +125,10 @@ public partial class MainWindow : Adw.ApplicationWindow {
     private void About(Gio.SimpleAction sender, EventArgs e) {
         var aboutDialog = new AboutDialog(window: this);
         aboutDialog.Present();
+    }
+
+    public void NewInstance(Gio.SimpleAction sender, EventArgs e) {
+        // TODO: Implement
     }
 
     private void CreateAction(string name,
