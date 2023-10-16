@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using System.Text.Json;
 using Microsoft.Extensions.Logging;
 using Nickvision.Aura;
 
@@ -27,5 +28,14 @@ public static class Utils {
     public static string GetCacheFolder(params string[] paths) {
         var f = GetCacheFolder();
         return Path.Combine(f, Path.Combine(paths));
+    }
+
+    public static T LoadJson<T>(string path) {
+        if (!File.Exists(path)) {
+            return default;
+        }
+
+        var json = File.ReadAllText(path);
+        return JsonSerializer.Deserialize<T>(json);
     }
 }

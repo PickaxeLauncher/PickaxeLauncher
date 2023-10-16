@@ -2,7 +2,6 @@ using Gtk 4.0;
 using Adw 1;
 
 menu _mainMenu {
-    item(_("New Instence"), "win.newInstance")
     item(_("Preferences"), "win.preferences")
     item(_("Keyboard Shortcuts"), "win.keyboardShortcuts")
     item(_("About Application"), "win.about")
@@ -27,8 +26,7 @@ Adw.ApplicationWindow _root {
     content: Adw.NavigationSplitView _navView {
         sidebar: Adw.NavigationPage {
             width-request: 360;
-            tag: "applications";
-            title: _("Applications");
+            tag: "instences";
             child: Adw.ToolbarView {
                 [top]
                 Adw.HeaderBar applicationsHeaderBar {
@@ -52,7 +50,7 @@ Adw.ApplicationWindow _root {
                         styles ["flat"]
                     }
 
-                    ToggleButton applicationsSearchButton {
+                    ToggleButton {
                         icon-name: "system-search-symbolic";
 
                         ShortcutController {
@@ -64,6 +62,12 @@ Adw.ApplicationWindow _root {
                             }
                         }
                     }
+
+                    ToggleButton {
+                        icon-name: "list-add-symbolic";
+                        action-name: "win.newInstance";
+                    }
+
                 }
 
                 [top]

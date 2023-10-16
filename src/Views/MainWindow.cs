@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Nickvision.Aura;
 using System.IO;
 using Microsoft.Extensions.Logging;
+using Pickaxe.Providers;
 
 namespace Pickaxe.Views;
 
@@ -50,6 +51,7 @@ public partial class MainWindow : Adw.ApplicationWindow {
             async (sender, args) => await SetupProfilePic();
         BuildAccountSwitcher();
         _ = SetupProfilePic();
+
     }
 
     private void BuildAccountSwitcher() {

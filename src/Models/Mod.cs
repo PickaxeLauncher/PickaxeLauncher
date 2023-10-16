@@ -7,10 +7,12 @@ public enum ModSource {
 }
 
 public interface IMod {
-    public ModSource Source { get; set; }
+    public string Name { get; }
+    public ModSource Source { get; }
 }
 
 public class InstalledMod : IMod {
+    public string Name { get; set; }
     public bool IsEnabled { get; set; } = true;
     public ModSource Source { get; set; }
 }
