@@ -3,14 +3,14 @@ using Pickaxe.Models;
 
 namespace Pickaxe.Controllers;
 
-
 public class NewInstanceController {
-    public Instance Instance { get; set; } = new();
-    private InstanceLoader _loader;
+    private readonly InstanceLoader _loader;
 
     public NewInstanceController(InstanceLoader loader) {
         _loader = loader;
     }
+
+    public Instance Instance { get; set; } = new();
 
     public async Task CreateInstance() {
         _loader.Add(Instance);

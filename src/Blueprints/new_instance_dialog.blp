@@ -1,0 +1,105 @@
+using Gtk 4.0;
+using Adw 1;
+
+Adw.Window _root {
+    default-width: 480; // Same as Nautilus' properties window
+    default-height: -1;
+    modal: true;
+
+    ShortcutController {
+        Shortcut {
+            trigger: "Escape";
+            action: "action(window.close)";
+        }
+    }
+
+    Adw.ToolbarView {
+
+        [top]
+        Adw.HeaderBar HeaderBar {
+            show-start-title-buttons: false;
+            show-end-title-buttons: false;
+
+            [start]
+            Button cancel_button {
+                label: _("Cancel");
+                action-name: "window.close";
+            }
+
+            [end]
+            Button apply_button {
+                styles [
+                    "suggested-action"
+                ]
+            }
+        }
+
+        Adw.PreferencesPage {
+            Adw.PreferencesGroup {
+                Adw.Clamp {
+                    maximum-size: 200;
+                    Overlay {
+                        Overlay cover_overlay {
+                            halign: center;
+                            valign: center;
+
+                            [overlay]
+                            Button _change_icon_button {
+                                icon-name: "document-edit-symbolic";
+                                tooltip-text: _("Change Icon");
+                                halign: end;
+                                valign: end;
+                                margin-bottom: 6;
+                                margin-end: 6;
+
+                                styles [
+                                    "circular", "osd"
+                                ]
+                            }
+
+                            Picture _icon {
+                                width-request: 100;
+                                height-request: 100;
+                            }
+                        }
+                    }
+                }
+            }
+
+            Adw.PreferencesGroup {
+                Adw.EntryRow _name_entry {
+                    title: _("Name");
+                }
+            }
+
+            Adw.PreferencesGroup {
+                title: _("Mod Loader");
+                Adw.ActionRow {
+                    title: _("Vanilla");
+                    activatable-widget: _vanilla_check;
+                    [suffix]
+                    CheckButton _vanilla_check {
+                    }
+                }
+                Adw.ActionRow {
+                    title: _("Forge");
+                    activatable-widget: _forge_check;
+                    [suffix]
+                    CheckButton _forge_check {
+                        group: _vanilla_check;
+                    }
+                }
+                Adw.ActionRow {
+                    title: _("Fabric");
+                    activatable-widget: _fabric_check;
+                    [suffix]
+                    CheckButton _fabric_check {
+                        group: _vanilla_check;
+                    }
+                }
+            }
+
+        }
+    }
+
+}

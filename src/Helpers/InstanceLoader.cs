@@ -23,16 +23,17 @@ public class InstanceLoader : List<Instance> {
         });
     }
 
-    public static async Task<InstanceLoader> Load() {
-        var self = new InstanceLoader();
+    public static string InstanceDir => Utils.GetAppFolder("Instances");
+
+    public async Task StartupAsync() {
+        if (!Directory.Exists(InstanceDir)) {
+            Directory.CreateDirectory(InstanceDir);
+        }
         foreach (var dir in Directory.GetDirectories(InstanceDir)) {
             var instance = await Instance.Load(Path.GetFileName(dir));
             if (instance != null) {
-                self.Add(instance);
+                Add(instance);
             }
         }
-        return self;
     }
-
-    public static string InstanceDir => Utils.GetAppFolder("Instances");
 }

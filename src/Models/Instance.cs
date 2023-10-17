@@ -18,6 +18,7 @@ public class Instance {
         if (!File.Exists(path)) {
             return default;
         }
+
         var json = await File.ReadAllTextAsync(path);
         return JsonSerializer.Deserialize<Instance>(json);
     }
@@ -27,5 +28,4 @@ public class Instance {
         var json = JsonSerializer.Serialize(this);
         await File.WriteAllTextAsync(path, json);
     }
-
 }

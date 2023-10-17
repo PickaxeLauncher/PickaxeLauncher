@@ -11,6 +11,7 @@ public class MainWindowController : IDisposable {
     private bool _disposed;
     private TaskbarItem _taskbarItem;
     public AccountController AccountController { get; } = new();
+    public InstanceLoader InstanceLoader { get; } = new();
 
     public TaskbarItem TaskbarItem {
         set {
@@ -28,9 +29,11 @@ public class MainWindowController : IDisposable {
     }
 
     public PreferencesController CreatePreferencesViewController() => new();
+    public NewInstanceController CreateNewInstanceController() => new(InstanceLoader);
 
     public async Task StartupAsync() {
         await AccountController.StartupAsync();
+        await InstanceLoader.StartupAsync();
     }
 
     ~MainWindowController() => Dispose(false);

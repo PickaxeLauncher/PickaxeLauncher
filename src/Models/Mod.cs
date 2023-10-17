@@ -12,7 +12,7 @@ public interface IMod {
 }
 
 public class InstalledMod : IMod {
-    public string Name { get; set; }
     public bool IsEnabled { get; set; } = true;
+    public string Name { get; set; }
     public ModSource Source { get; set; }
 }

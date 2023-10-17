@@ -1,2 +1,4 @@
 namespace Pickaxe.Models;
-public struct MinecraftVersion { }
+
+public struct MinecraftVersion {
+}
