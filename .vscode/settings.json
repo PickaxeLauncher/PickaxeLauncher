@@ -2,11 +2,14 @@
     "cSpell.words": [
         "devel",
         "Gettext",
+        "Interp",
         "libadwaita",
         "Modrinth",
         "Msal",
         "Nickvision",
-        "Paintable"
+        "Paintable",
+        "Pixbuf",
+        "Subpixbuf"
     ],
     "files.associations": {
         "*.ui": "xml",

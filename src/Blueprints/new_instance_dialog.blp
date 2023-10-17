@@ -60,6 +60,8 @@ Adw.Window _root {
                             Picture _icon {
                                 width-request: 100;
                                 height-request: 100;
+                                can-shrink: true;
+                                content-fit: fill;
                             }
                         }
                     }
@@ -79,6 +81,7 @@ Adw.Window _root {
                     activatable-widget: _vanilla_check;
                     [suffix]
                     CheckButton _vanilla_check {
+                        active: true;
                     }
                 }
                 Adw.ActionRow {
