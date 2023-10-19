@@ -19,6 +19,7 @@ public partial class MainWindow : Adw.ApplicationWindow {
     [Gtk.Connect] private readonly Adw.NavigationSplitView _navView;
     [Gtk.Connect] private readonly Adw.Avatar _profilePic;
     [Gtk.Connect] private readonly Adw.WindowTitle _title;
+    [Gtk.Connect] private readonly Gtk.ListBox _instanceList;
 
     public MainWindow(MainWindowController controller, Adw.Application application) : this(
         Builder.FromFile("window.ui"), controller, application) {
@@ -48,15 +49,38 @@ public partial class MainWindow : Adw.ApplicationWindow {
         CreateAction("signOut", SignOut);
         _controller.AccountController.AccountChanged +=
             async (sender, args) => await SetupProfilePic();
-        BuildAccountSwitcher();
-        _ = SetupProfilePic();
     }
+
+
+    public new async Task Present() {
+        BuildAccountSwitcher();
+        BuildInstanceSidebar();
+        await SetupProfilePic();
+        base.Present();
+    }
+
 
     private void BuildAccountSwitcher() {
         var menu = Gio.Menu.New();
         menu.AppendItem(Gio.MenuItem.New("Sign Out", "win.signOut"));
         // menu.AppendItem(Gio.MenuItem.New("Add Account", "win.addAccount"));
         _accountMenuButton.MenuModel = menu;
+    }
+
+    private void BuildInstanceSidebar() {
+        foreach (var instance in _controller.InstanceLoader) {
+            Adw.ActionRow row = new() {
+                Title = instance.Name,
+            };
+
+            if (instance.Icon is not null) {
+                row.AddPrefix(Gtk.Picture.NewForFile(Gio.Functions.FileNewForPath(instance.Icon)));
+            } else {
+                row.AddPrefix(Gtk.Picture.NewForResource("/dev/bedsteler20/Pickaxe/minecraft.svg"));
+            }
+
+            _instanceList.Append(row);
+        }
     }
 
     private async Task SetupProfilePic() {
@@ -83,10 +107,10 @@ public partial class MainWindow : Adw.ApplicationWindow {
 
     public async Task StartAsync() {
         _application.AddWindow(this);
-        Present();
+        await _controller.StartupAsync();
         _controller.TaskbarItem =
             await TaskbarItem.ConnectLinuxAsync($"{Aura.Active.AppInfo.ID}.desktop");
-        await _controller.StartupAsync();
+        await Present();
     }
 
     private bool OnCloseRequested(Gtk.Window sender, EventArgs e) {

@@ -13,6 +13,7 @@ public class Instance {
     public string? Icon { get; set; }
     public MinecraftVersion MinecraftVersion { get; set; }
     public ModLoader ModLoader { get; set; }
+    public string? Icon { get; set; }
 
     public async static Task<Instance> Load(string name) {
         var path = Utils.GetAppFolder(INSTANCE_DIR_NAME, name, INSTANCE_FILE_NAME);
