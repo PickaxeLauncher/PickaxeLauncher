@@ -10,6 +10,7 @@ public class Instance {
     private const string INSTANCE_DIR_NAME = "Instances";
     private const string INSTANCE_FILE_NAME = "Instance.json";
     public string Name { get; set; }
+    public string? Icon { get; set; }
     public MinecraftVersion MinecraftVersion { get; set; }
     public ModLoader ModLoader { get; set; }
 

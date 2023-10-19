@@ -2,7 +2,7 @@ using Gtk 4.0;
 using Adw 1;
 
 Adw.Window _root {
-    default-width: 480; // Same as Nautilus' properties window
+    default-width: 480;
     default-height: -1;
     modal: true;
 
@@ -14,92 +14,107 @@ Adw.Window _root {
     }
 
     Adw.ToolbarView {
-
         [top]
         Adw.HeaderBar HeaderBar {
             show-start-title-buttons: false;
             show-end-title-buttons: false;
+            title-widget: Adw.WindowTitle {
+                title: "New Instance";
+            };
 
             [start]
-            Button cancel_button {
-                label: _("Cancel");
-                action-name: "window.close";
+            Button _backButton {
+                label: _("Back");
             }
 
             [end]
-            Button apply_button {
+            Button _nextButton {
+                label: _("Next");
                 styles [
                     "suggested-action"
                 ]
             }
         }
 
-        Adw.PreferencesPage {
-            Adw.PreferencesGroup {
-                Adw.Clamp {
-                    maximum-size: 200;
-                    Overlay {
-                        Overlay cover_overlay {
-                            halign: center;
-                            valign: center;
 
-                            [overlay]
-                            Button _change_icon_button {
-                                icon-name: "document-edit-symbolic";
-                                tooltip-text: _("Change Icon");
-                                halign: end;
-                                valign: end;
-                                margin-bottom: 6;
-                                margin-end: 6;
 
-                                styles [
-                                    "circular", "osd"
-                                ]
-                            }
+        Adw.NavigationView _navView {
+            Adw.NavigationPage {
+                tag: "stage1";
+                child: Adw.PreferencesPage {
+                    Adw.PreferencesGroup {
+                        Adw.Clamp {
+                            maximum-size: 200;
+                            Overlay {
+                                Overlay cover_overlay {
+                                    halign: center;
+                                    valign: center;
 
-                            Picture _icon {
-                                width-request: 100;
-                                height-request: 100;
-                                can-shrink: true;
-                                content-fit: fill;
+                                    [overlay]
+                                    Button _changeIconButton {
+                                        icon-name: "document-edit-symbolic";
+                                        tooltip-text: _("Change Icon");
+                                        halign: end;
+                                        valign: end;
+                                        margin-bottom: 6;
+                                        margin-end: 6;
+
+                                        styles [
+                                            "circular", "osd"
+                                        ]
+                                    }
+
+                                    Picture _icon {
+                                        width-request: 100;
+                                        height-request: 100;
+                                        can-shrink: true;
+                                        content-fit: fill;
+                                    }
+                                }
                             }
                         }
                     }
-                }
-            }
 
-            Adw.PreferencesGroup {
-                Adw.EntryRow _name_entry {
-                    title: _("Name");
-                }
-            }
+                    Adw.PreferencesGroup {
+                        Adw.EntryRow _nameEntry {
+                            title: _("Name");
+                        }
+                    }
 
-            Adw.PreferencesGroup {
-                title: _("Mod Loader");
-                Adw.ActionRow {
-                    title: _("Vanilla");
-                    activatable-widget: _vanilla_check;
-                    [suffix]
-                    CheckButton _vanilla_check {
-                        active: true;
+                    Adw.PreferencesGroup {
+                        title: _("Mod Loader");
+                        Adw.ActionRow {
+                            title: _("Vanilla");
+                            activatable-widget: _vanillaCheck;
+                            [suffix]
+                            CheckButton _vanillaCheck {
+                                active: true;
+                            }
+                        }
+                        Adw.ActionRow {
+                            title: _("Forge");
+                            activatable-widget: _forgeCheck;
+                            [suffix]
+                            CheckButton _forgeCheck {
+                                group: _vanillaCheck;
+                            }
+                        }
+                        Adw.ActionRow {
+                            title: _("Fabric");
+                            activatable-widget: _fabricCheck;
+                            [suffix]
+                            CheckButton _fabricCheck {
+                                group: _vanillaCheck;
+                            }
+                        }
                     }
-                }
-                Adw.ActionRow {
-                    title: _("Forge");
-                    activatable-widget: _forge_check;
-                    [suffix]
-                    CheckButton _forge_check {
-                        group: _vanilla_check;
-                    }
-                }
-                Adw.ActionRow {
-                    title: _("Fabric");
-                    activatable-widget: _fabric_check;
-                    [suffix]
-                    CheckButton _fabric_check {
-                        group: _vanilla_check;
-                    }
-                }
+
+                };
+            }
+            Adw.NavigationPage {
+                tag: "stage2";
+                child: Adw.PreferencesPage _versionsPage {
+                };
             }
 
         }
