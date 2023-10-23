@@ -80,44 +80,109 @@ Adw.Window _root {
                             title: _("Name");
                         }
                     }
+                };
+            }
 
-                    Adw.PreferencesGroup {
-                        title: _("Mod Loader");
-                        Adw.ActionRow {
-                            title: _("Vanilla");
-                            activatable-widget: _vanillaCheck;
-                            [suffix]
-                            CheckButton _vanillaCheck {
-                                active: true;
+            Adw.NavigationPage {
+                tag: "version_page";
+                child: Stack _version_stack {
+                    StackPage {
+                        name: "_loading_page";
+                        child: Spinner {
+                            spinning: true;
+                            margin-bottom: 140;
+                            margin-top: 140;
+                        };
+                    }
+                    StackPage {
+                        name: "_done_page";
+
+                        child: Adw.PreferencesPage {
+                            Adw.PreferencesGroup {
+                                Adw.ExpanderRow _release_row {
+                                    title: "Release";
+                                    expanded: true;
+                                }
                             }
-                        }
-                        Adw.ActionRow {
-                            title: _("Forge");
-                            activatable-widget: _forgeCheck;
-                            [suffix]
-                            CheckButton _forgeCheck {
-                                group: _vanillaCheck;
+                            Adw.PreferencesGroup {
+                                Adw.ExpanderRow _snapshot_row {
+                                    title: "Snapshots";
+                                }
                             }
-                        }
-                        Adw.ActionRow {
-                            title: _("Fabric");
-                            activatable-widget: _fabricCheck;
-                            [suffix]
-                            CheckButton _fabricCheck {
-                                group: _vanillaCheck;
+                        };
+                    }
+                };
+            }
+
+            Adw.NavigationPage {
+                tag: "install_page";
+                Stack _installStack {
+                    vexpand: true;
+
+                    StackPage _installPage {
+                        name: "page_install";
+                        child: Box {
+                            margin-top: 10;
+                            margin-start: 10;
+                            margin-bottom: 10;
+                            margin-end: 10;
+                            orientation: vertical;
+                            valign: center;
+                            spacing: 5;
+
+                            Image {
+                                icon-name: "folder-download-symbolic";
+                                halign: center;
+                                margin-bottom: 2;
+                                pixel-size: 70;
                             }
-                        }
+
+                            Adw.StatusPage _downloadPage {
+                                title: "Downloading";
+                                description: _("This could take a while.");
+
+                                ProgressBar _progressBar {
+                                    width-request: 300;
+                                    halign: center;
+                                    margin-top: 10;
+                                    margin-bottom: 12;
+                                    show-text: true;
+                                }
+                            }
+                        };
                     }
 
-                };
-            }
-            Adw.NavigationPage {
-                tag: "stage2";
-                child: Adw.PreferencesPage _versionsPage {
-                };
-            }
+                    StackPage _completePage {
+                        name: "page_installed";
+                        child: Adw.StatusPage {
+                            icon-name: "selection-mode-symbolic";
+                            title: _("Completed!");
 
+                            Button _completeButton {
+                                label: _("Show Programs");
+                                halign: center;
+
+                                styles [
+                                    "pill",
+                                    "suggested-action",
+                                ]
+                            }
+                        };
+                    }
+
+                    StackPage _errorPage {
+                        name: "page_error";
+                        child: Adw.StatusPage {
+                            icon-name: "dialog-warning-symbolic";
+                            title: _("Installation Failed!");
+                            description: _("Something went wrong.");
+                        };
+                    }
+                }
+            }
         }
+
+
     }
 
 }

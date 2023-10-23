@@ -1,7 +1,11 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
+using CmlLib.Core;
+using CmlLib.Core.Version;
+using CmlLib.Core.VersionMetadata;
 using Pickaxe.Helpers;
 
 namespace Pickaxe.Models;
@@ -10,10 +14,13 @@ public class Instance {
     private const string INSTANCE_DIR_NAME = "Instances";
     private const string INSTANCE_FILE_NAME = "Instance.json";
     public string Name { get; set; }
-    public string? Icon { get; set; }
-    public MinecraftVersion MinecraftVersion { get; set; }
-    public ModLoader ModLoader { get; set; }
-    public string? Icon { get; set; }
+    public string Icon { get; set; }
+    public string Version { get; set; }
+
+    public string Path => Utils.GetAppFolder(INSTANCE_DIR_NAME, Name);
+
+    public MinecraftPath MinecraftPath =>
+        new MinecraftPath(Utils.GetAppFolder(INSTANCE_DIR_NAME, Name, "minecraft"));
 
     public async static Task<Instance> Load(string name) {
         var path = Utils.GetAppFolder(INSTANCE_DIR_NAME, name, INSTANCE_FILE_NAME);

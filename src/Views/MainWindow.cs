@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Nickvision.Aura;
 using System.IO;
 using Microsoft.Extensions.Logging;
+using CmlLib.Core;
 
 namespace Pickaxe.Views;
 
@@ -16,10 +17,10 @@ public partial class MainWindow : Adw.ApplicationWindow {
     [Gtk.Connect] private readonly Gtk.MenuButton _accountMenuButton;
     private readonly Adw.Application _application;
     private readonly MainWindowController _controller;
+    [Gtk.Connect] private readonly Gtk.ListBox _instanceList;
     [Gtk.Connect] private readonly Adw.NavigationSplitView _navView;
     [Gtk.Connect] private readonly Adw.Avatar _profilePic;
     [Gtk.Connect] private readonly Adw.WindowTitle _title;
-    [Gtk.Connect] private readonly Gtk.ListBox _instanceList;
 
     public MainWindow(MainWindowController controller, Adw.Application application) : this(
         Builder.FromFile("window.ui"), controller, application) {
@@ -51,14 +52,12 @@ public partial class MainWindow : Adw.ApplicationWindow {
             async (sender, args) => await SetupProfilePic();
     }
 
-
     public new async Task Present() {
         BuildAccountSwitcher();
         BuildInstanceSidebar();
         await SetupProfilePic();
         base.Present();
     }
-
 
     private void BuildAccountSwitcher() {
         var menu = Gio.Menu.New();
@@ -68,19 +67,25 @@ public partial class MainWindow : Adw.ApplicationWindow {
     }
 
     private void BuildInstanceSidebar() {
-        foreach (var instance in _controller.InstanceLoader) {
+        _controller.InstanceLoader.Connect(_instanceList, instance => {
             Adw.ActionRow row = new() {
-                Title = instance.Name,
+                Title = instance.Name
             };
-
             if (instance.Icon is not null) {
                 row.AddPrefix(Gtk.Picture.NewForFile(Gio.Functions.FileNewForPath(instance.Icon)));
             } else {
                 row.AddPrefix(Gtk.Picture.NewForResource("/dev/bedsteler20/Pickaxe/minecraft.svg"));
             }
-
-            _instanceList.Append(row);
-        }
+            var btn = new Gtk.Button() { Label = "Play" };
+            btn.OnClicked += async (s, e) => {
+                var launcher = new CMLauncher(instance.MinecraftPath);
+                var p = await launcher.LaunchAsync(instance.Version, new() {
+                    MaximumRamMb = 4096,
+                });
+            };
+            row.AddSuffix(btn);
+            return row;
+        });
     }
 
     private async Task SetupProfilePic() {

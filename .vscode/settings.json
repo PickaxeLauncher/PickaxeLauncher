@@ -1,5 +1,6 @@
 {
     "cSpell.words": [
+        "Activatable",
         "devel",
         "Gettext",
         "Interp",
@@ -12,6 +13,19 @@
         "Paintable",
         "Pixbuf",
         "Subpixbuf"
+    ],
+    "cSpell.enabledLanguageIds": [
+        "csharp",
+        "xml",
+        "git-commit",
+        "json",
+        "jsonc",
+        "markdown",
+        "plaintext",
+        "text",
+        "yaml",
+        "yml",
+        "blueprint-gtk"
     ],
     "files.associations": {
         "*.ui": "xml",

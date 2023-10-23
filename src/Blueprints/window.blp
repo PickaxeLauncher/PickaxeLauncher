@@ -51,19 +51,6 @@ Adw.ApplicationWindow _root {
                     }
 
                     ToggleButton {
-                        icon-name: "system-search-symbolic";
-
-                        ShortcutController {
-                            scope: global;
-
-                            Shortcut {
-                                trigger: "<Control>F";
-                                action: "activate";
-                            }
-                        }
-                    }
-
-                    ToggleButton {
                         icon-name: "list-add-symbolic";
                         action-name: "win.newInstance";
                     }

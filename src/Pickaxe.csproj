@@ -5,6 +5,7 @@
         <Nullable>disable</Nullable>
     </PropertyGroup>
     <ItemGroup>
+        <PackageReference Include="CmlLib.Core.Installer.Forge" Version="0.0.2" />
         <PackageReference Include="CurseForge.APIClient" Version="2.1.0" />
         <PackageReference Include="GirCore.Adw-1" Version="0.5.0" />
         <PackageReference Include="GirCore.Gtk-4.0" Version="0.5.0" />
