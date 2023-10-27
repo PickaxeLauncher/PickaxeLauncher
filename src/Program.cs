@@ -7,6 +7,9 @@ using System.IO;
 using System.Reflection;
 using Nickvision.Aura;
 using Pickaxe.Helpers;
+using System.Threading.Tasks;
+using Pickaxe.Services;
+using CmlLib.Core;
 
 namespace Pickaxe;
 
@@ -85,6 +88,10 @@ public partial class Program : GetTextMixin {
             return -1;
         }
     }
+
+    private async Task InitulizeServices() {
+        Injector.InstallService(new CMLauncher(Utils.GetAppFolder()));
+    } 
 
     private async void OnActivate(Gio.Application sedner, EventArgs e) {
         //Main Window
