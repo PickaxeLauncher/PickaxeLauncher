@@ -36,7 +36,7 @@ public abstract class ListModel<T> : List<T> {
         foreach (var item in this) {
             widget.Append(factory(item));
         }
-        _added += (sender, args) => widget.Push(factory(args));
-        _removed += (sender, args) => widget.Pop();
+        _added += (sender, args) => widget.Append(factory(args));
+        _removed += (sender, args) => widget.Remove(factory(args));
     }
 }

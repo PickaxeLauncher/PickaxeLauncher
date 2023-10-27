@@ -21,20 +21,26 @@
     </ItemGroup>
     <Target Name="LocalToolRestore" BeforeTargets="CollectPackageReferences">
         <Message Text="Restoring tools" Importance="High" />
-        <Exec Command="if [ !  -d '../.nuget-repo' ]; then mkdir -p ../.nuget-repo; cd ../.nuget-repo; wget https://github.com/PickaxeLauncher/gir.core/releases/download/0.5.0/packages.tar.xz; tar xf packages.tar.xz; rm packages.tar.xz; fi" />
+        <Exec
+            Command="if [ !  -d '../.nuget-repo' ]; then mkdir -p ../.nuget-repo; cd ../.nuget-repo; wget https://github.com/PickaxeLauncher/gir.core/releases/download/0.5.0/packages.tar.xz; tar xf packages.tar.xz; rm packages.tar.xz; fi" />
     </Target>
     <Target Name="PreBuild" BeforeTargets="PreBuildEvent">
         <Exec Command="echo Compiling extra resources..." />
-        <Exec Command="blueprint-compiler batch-compile ./Blueprints ./Blueprints ./Blueprints/*.blp" />
-        <Exec Command="glib-compile-resources --sourcedir ./Resources ./Resources/dev.bedsteler20.Pickaxe.gresource.xml --target=$(OutDir)/dev.bedsteler20.Pickaxe.gresource" />
-        <Exec Command="while read lang_code; do \&#xA;  mkdir -p $(OutDir)${lang_code}; \&#xA;  msgfmt ./Resources/po/${lang_code}.po -o $(OutDir)${lang_code}/application.mo; \&#xA;done %3C ./Resources/po/LINGUAS" />
+        <Exec
+            Command="blueprint-compiler batch-compile ./Blueprints ./Blueprints ./Blueprints/*.blp" />
+        <Exec
+            Command="glib-compile-resources --sourcedir ./Resources ./Resources/dev.bedsteler20.Pickaxe.gresource.xml --target=$(OutDir)/dev.bedsteler20.Pickaxe.gresource" />
+        <Exec
+            Command="while read lang_code; do \&#xA;  mkdir -p $(OutDir)${lang_code}; \&#xA;  msgfmt ./Resources/po/${lang_code}.po -o $(OutDir)${lang_code}/application.mo; \&#xA;done %3C ./Resources/po/LINGUAS" />
     </Target>
     <Target Name="PostBuild" AfterTargets="PostBuildEvent">
         <Exec Command="rm ./Blueprints/*.ui" />
     </Target>
     <Target Name="PostPublish" AfterTargets="Publish">
-        <Exec Command="cp $(OutDir)/dev.bedsteler20.Pickaxe.gresource $(PublishDir)/dev.bedsteler20.Pickaxe.gresource" />
-        <Exec Command="while read lang_code; do \&#xA;  cp -r $(OutDir)${lang_code} $(PublishDir); \&#xA;done %3C ./Resources/po/LINGUAS" />
+        <Exec
+            Command="cp $(OutDir)/dev.bedsteler20.Pickaxe.gresource $(PublishDir)/dev.bedsteler20.Pickaxe.gresource" />
+        <Exec
+            Command="while read lang_code; do \&#xA;  cp -r $(OutDir)${lang_code} $(PublishDir); \&#xA;done %3C ./Resources/po/LINGUAS" />
     </Target>
     <Target Name="EmbedUIFiles" BeforeTargets="BeforeResGen">
         <ItemGroup>

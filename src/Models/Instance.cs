@@ -7,6 +7,7 @@ using CmlLib.Core;
 using CmlLib.Core.Version;
 using CmlLib.Core.VersionMetadata;
 using Pickaxe.Helpers;
+using Pickaxe.Helpers.Extension;
 
 namespace Pickaxe.Models;
 

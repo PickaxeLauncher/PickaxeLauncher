@@ -67,6 +67,7 @@ public class NewInstanceDialog : Adw.Window {
 
 
     private void LoadVersionsPage() => Task.Run(async () => {
+
         _controller.SetName(_nameEntry.GetText());
         if (_controller.HasName() == false) {
             ShowErrorMessage("The instance must have a name");
@@ -135,7 +136,6 @@ public class NewInstanceDialog : Adw.Window {
             var file = task.Result;
             if (file == null) return;
             var pixbuf = GdkPixbuf.Pixbuf.NewFromFile(file.GetPath()).MakeSquare(100);
-            _controller.SetIcon(pixbuf);
             _icon.SetPixbuf(pixbuf);
         });
     }

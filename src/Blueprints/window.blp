@@ -19,7 +19,6 @@ Adw.ApplicationWindow _root {
             _navView.collapsed: true;
             _startHeaderBox.visible: false;
             _endHeaderBox.visible: false;
-            _actionBar.visible: true;
         }
     }
 
@@ -29,7 +28,7 @@ Adw.ApplicationWindow _root {
             tag: "instences";
             child: Adw.ToolbarView {
                 [top]
-                Adw.HeaderBar applicationsHeaderBar {
+                Adw.HeaderBar {
                     visible: true;
 
                     [end]
@@ -92,9 +91,7 @@ Adw.ApplicationWindow _root {
                     };
                 };
             };
-        }
-
-        ;
+        };
         content: Adw.NavigationPage {
             tag: "info";
             child: Adw.ToolbarView {
@@ -112,98 +109,28 @@ Adw.ApplicationWindow _root {
                         valign: center;
                     }
                 }
-                content: Adw.ToastOverlay toastOverlay {
+                content: Adw.ToastOverlay {
                     child: Box {
                         vexpand: true;
                         orientation: vertical;
-
-                        Stack permissionsStack {
-                            vexpand: true;
-
-                            StackPage {
-                                name: "withNoPermissionsPage";
-                                child: Box {};
-                            }
-
-                            StackPage {
-                                name: "withPermissionsPage";
-                                child: Adw.PreferencesPage permissionsBox {
-                                    Adw.PreferencesGroup appInfoGroup {}
-                                };
+                        Adw.Clamp {
+                            maximum-size: 200;
+                            Picture _icon {
+                                width-request: 100;
+                                height-request: 100;
+                                can-shrink: true;
+                                content-fit: fill;
                             }
                         }
-
-                        styles [
-                            "permissions",
-                        ]
+                        Label _instanceNameLabel {
+                            halign: center;
+                            margin-top: 12;
+                            margin-bottom: 12;
+                            label: _("No information available.");
+                        }
                     };
                 };
-
-                [bottom]
-                ActionBar _actionBar {
-                    visible: false;
-
-                    Box startActionBox {
-                        valign: center;
-                    }
-
-                    [end]
-                    Box endActionBox {
-                        valign: center;
-                    }
-                }
             };
         };
     };
 }
-
-// Adw.ApplicationWindow _root {
-// default-width: 800;
-// default-height: 600;
-// Adw.NavigationSplitView _navView {
-// sidebar: Adw.NavigationPage {
-// width-request: 360;
-// visible: true;
-// tag: "instences";
-// title: _("Instences");
-// child: Adw.ToolbarView {
-// [top]
-// Adw.HeaderBar {
-// visible: true;
-// 
-// [end]
-// Gtk.MenuButton {
-// direction: none;
-// menu-model: mainMenu;
-// tooltip-text: _("Main Menu");
-// primary: true;
-// }
-// 
-// [end]
-// MenuButton _accountMenuButton {
-// direction: none;
-// tooltip-text: _("Account Menu");
-// child: Adw.Avatar _profilePic {
-// size: 24;
-// };
-// styles ["flat"]
-// }
-// 
-// }
-// };
-// };
-// content: Adw.NavigationPage {
-// tag: "home";
-// title: _("Home");
-// child: Adw.ToolbarView {
-// [top]
-// Adw.HeaderBar _headerBar {
-// visible: true;
-// title-widget: Adw.WindowTitle _title {
-// title: _("Home");
-// };
-// }
-// };
-// };
-// }
-// }
